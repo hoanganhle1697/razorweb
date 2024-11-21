@@ -8,12 +8,14 @@ namespace Entity_Razor.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public string Slug { get; set; }
+        
+        public string? Slug { get; set; }
+
         [StringLength(255)]
-        [Required]
+        [Required(ErrorMessage = "{0} bắt buộc nhập")]
         [Column(TypeName = "nvarchar")]
-        public string? Title { get; set; }
+
+        public string Title { get; set; }
         [Required]
         [DataType(DataType.Date)]
         public DateTime Created { get; set; }
