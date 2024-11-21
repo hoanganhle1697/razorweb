@@ -21,7 +21,7 @@ namespace Entity_Razor.Models
             base.OnModelCreating(modelBuilder);
         }
 
-        public override int SaveChanges()
+        public override async Task<int>SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<Article>())
             {
@@ -35,7 +35,7 @@ namespace Entity_Razor.Models
                 }
             }
 
-            return base.SaveChanges();
+            return await base.SaveChangesAsync();
         }
 
     }
