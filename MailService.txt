@@ -1,0 +1,44 @@
+basic:
+
+new MailMessage
+-message.bodyencoding=encodeing.utf8
+-message.isbodyhtml=true
+-message.sender(from)
+
+
+new SmtpClient("smtp.gmail.com")
+-smtp.port=587
+-smtp.enablessl=true
+-smtp.credentials=new networkcredential(_gmai,_passwork) //sender
+
+await smtpClient.SendMail(mailMessage) 
+-->Bat IMAP-->lay pass dai dien tu goole-->baomat-->serch tu khoa "mat khau ung dung"
+
+Dung thu vien mailkit+mimekit:
+
+->dotnet--> add packet MailKit-->dotnet add...
+->Cấu hình dịch vụ gửi mail
+	-tạo section MailSettings trong appsetting.json(mail,displayname,password,host,port)-->thông tin người gửi và cấu hình máy chủ
+
+	- services-->MailSettings tương ứng với section trong appsetting.json
+
+	-Đăng kí và cấu hình đối tượng MailSettings:
+		builder.service.configuration<MailSettings>(builder.configuration.getsection("MailSettings"));
+
+	-Services-->MailContent	(to,subject,body)--thông tin người nhận và nội dung mail
+	
+	-services-->tạo SendMailService:
+		-Inject IOptions<MailSettings> 
+		-Tạo phương thưc async SendMail(Content)
+			-mail=new Mimemessage((dùng thay cho MailMessage trong asp.net)(sender,from,to,subject,body)		
+				-sender,from,to=new MailBoxAddress(name,address)
+				-body: (thay cho mailMessage.IsBodyHtml = true) :
+					var builder=new BodyBuilder();
+					builder.HtmlBody=mailContent.Body
+					body=builder.ToMessageBody();			
+			-tạo smtpClient thông qua thư viện:using var smtp = new MailKit.Net.Smtp.SmtpClient();
+				-Mở kết nối smtp.ConnectAsync(host,port,SecureSocketOptions.StartTls)
+				-Xác thực tài khoản gửi smtp.AuthenticateAsync(mail,password)
+				-Gửi: smtp.SendAsync(mail)
+ 				-Ngắt kết nối: smtp.Disconnect(true)
+			

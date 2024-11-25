@@ -20,7 +20,7 @@ namespace Entity_Razor.Pages_Blog
         }
         
 
-        public const int ITEMS_PER_PAGE = 8;
+        public const int ITEMS_PER_PAGE = 5;
 
         [BindProperty(SupportsGet = true, Name = "p")]
         public int currentPage { set; get; }
@@ -48,7 +48,6 @@ namespace Entity_Razor.Pages_Blog
             // }
             // else{ Article=await list.ToListAsync();}
             Article = list.Skip((currentPage - 1) *ITEMS_PER_PAGE).Take(ITEMS_PER_PAGE).ToList();
-            Console.WriteLine(currentPage);
         }
     }
 }

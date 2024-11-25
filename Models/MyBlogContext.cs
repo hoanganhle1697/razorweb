@@ -1,11 +1,13 @@
+using Bogus;
 using Entity_Razor.Helper;
 using Humanizer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Entity_Razor.Models
 {
 
-    public class MyBlogContext : DbContext
+    public class MyBlogContext : IdentityDbContext<AppUser>
     {
         public DbSet<Article> articles { get; set; }
 
@@ -19,9 +21,21 @@ namespace Entity_Razor.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entityType.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    entityType.SetTableName(tableName.Substring(6));
+                }
+            }
+
         }
 
-        public override async Task<int>SaveChangesAsync(CancellationToken cancellationToken = default)
+
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<Article>())
             {
